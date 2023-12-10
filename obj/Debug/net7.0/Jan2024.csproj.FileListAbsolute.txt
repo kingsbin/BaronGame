@@ -1,0 +1,14 @@
+\\kings.internal\Staff$\j.campbell\Documents\C# Projects\Assessments\Jan2024\bin\Debug\net7.0\Jan2024.exe
+\\kings.internal\Staff$\j.campbell\Documents\C# Projects\Assessments\Jan2024\bin\Debug\net7.0\Jan2024.deps.json
+\\kings.internal\Staff$\j.campbell\Documents\C# Projects\Assessments\Jan2024\bin\Debug\net7.0\Jan2024.runtimeconfig.json
+\\kings.internal\Staff$\j.campbell\Documents\C# Projects\Assessments\Jan2024\bin\Debug\net7.0\Jan2024.dll
+\\kings.internal\Staff$\j.campbell\Documents\C# Projects\Assessments\Jan2024\bin\Debug\net7.0\Jan2024.pdb
+\\kings.internal\Staff$\j.campbell\Documents\C# Projects\Assessments\Jan2024\obj\Debug\net7.0\Jan2024.GeneratedMSBuildEditorConfig.editorconfig
+\\kings.internal\Staff$\j.campbell\Documents\C# Projects\Assessments\Jan2024\obj\Debug\net7.0\Jan2024.AssemblyInfoInputs.cache
+\\kings.internal\Staff$\j.campbell\Documents\C# Projects\Assessments\Jan2024\obj\Debug\net7.0\Jan2024.AssemblyInfo.cs
+\\kings.internal\Staff$\j.campbell\Documents\C# Projects\Assessments\Jan2024\obj\Debug\net7.0\Jan2024.csproj.CoreCompileInputs.cache
+\\kings.internal\Staff$\j.campbell\Documents\C# Projects\Assessments\Jan2024\obj\Debug\net7.0\Jan2024.dll
+\\kings.internal\Staff$\j.campbell\Documents\C# Projects\Assessments\Jan2024\obj\Debug\net7.0\refint\Jan2024.dll
+\\kings.internal\Staff$\j.campbell\Documents\C# Projects\Assessments\Jan2024\obj\Debug\net7.0\Jan2024.pdb
+\\kings.internal\Staff$\j.campbell\Documents\C# Projects\Assessments\Jan2024\obj\Debug\net7.0\Jan2024.genruntimeconfig.cache
+\\kings.internal\Staff$\j.campbell\Documents\C# Projects\Assessments\Jan2024\obj\Debug\net7.0\ref\Jan2024.dll
