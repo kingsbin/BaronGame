@@ -158,10 +158,10 @@ class Player {
     + RemoveTileFromSupply()
 }
 
-Piece --|> BaronPiece
-Piece --|> LESSPiece
-Piece --|> PBDSPiece
-HexGrid --o Tile
-HexGrid --o Piece
-Tile <-- Piece
+Piece <|-- BaronPiece
+Piece <|-- LESSPiece
+Piece <|-- PBDSPiece
+HexGrid o-- Tile
+HexGrid o-- Piece
+Tile --> Piece
 ```
