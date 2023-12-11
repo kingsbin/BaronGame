@@ -27,20 +27,48 @@ This is the core procedure in the program for playing a single game.
 
 ```
 Init variables
+Grid = NEW HexGrid 
+Player1 = NEW Player
+Player2 = NEW Player
+player1Turn = TRUE
+commands = []               //list to hold command strings
 REPEAT
+    OUTPUT Grid.GetGridAsString()           //output the board to screen
     FOR 1 to 3
-        INPUT player commands
+        INPUT cmd
+        commands.add cmd            //add command to list of cmds
     NEXT
-    FOR 1 to 3
-        IF CheckCommandIsValid() THEN
-            process command
+    FOREACH c IN commands           //c is the command being processed
+        validCommand = CheckCommandIsValid(c)
+        IF NOT validCommand THEN
+            OUTPUT "Invalid Command"
+        ELSE
+            IF player1Turn THEN
+                SummaryofResult=Grid.ExecuteCommand(c)     
+                Player1.UpdateLumber()       
+                Player1.UpdateFuel()
+                IF a new tile is placed THEN
+                    Player1.RemoveTileFromSupply()
+                ENDIF
+            ELSE
+                SummaryofResult=Grid.ExecuteCommand(c)     
+                Player2.UpdateLumber()       
+                Player2.UpdateFuel()
+                IF a new tile is placed THEN
+                    Player2.RemoveTileFromSupply()
+                ENDIF
+            ENDIF
+            OUTPUT SummaryofResult
         ENDIF
     NEXT
-    UpdateBoard and scores
-    Check if gameover
-    OUTPUT board
+
+    gameOver = grid.DestroyPiecesAndCountVP()          //update board positions and determine if gameover
+
     OUTPUT gameStatus
+    player1Turn = NOT player1Turn       //flip between players
 UNTIL gameover
+OUTPUT Grid.GetGridAsString     //output board to console
+DisplayEndMessages()
 ```
 
 There are 4 functions that appear to provide validation of user input prior to calls to the main objects to action player moves.  The initial function called is *CheckCommandIsValid*
