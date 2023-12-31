@@ -199,3 +199,4 @@ Tile --> Piece
 1) The Piece class is the basis for the other piece classes which all inherit from it.  It is also used for the "Serf" piece.  
 2) The playing pieces are held in an array (of class Piece) which is stored in the HexGrid object.  
 3) A **references** to each Piece object is also stored in the relevant **Tile** object
+
