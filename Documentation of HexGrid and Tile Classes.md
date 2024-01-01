@@ -56,6 +56,9 @@ class Tile {
     + GetNeighbours() Tile[]
     + GetDistanceToTileT() int
 }
+class Piece {
+    
+}
 HexGrid *-- Tile : Composition
 HexGrid *-- Piece : Composition
 Tile --> Piece : Association
@@ -131,6 +134,7 @@ This method is the **constructor** method for the class
 |Returns|
 |----|   
 |null |  
+
 *[Return to top](#top)*  
 
 ## <a id="hexgrid">HexGrid</a>  
