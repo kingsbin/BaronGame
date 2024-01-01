@@ -102,96 +102,112 @@ title: Baron Game
 classDiagram
 direction RL
 class HexGrid {
-    - Tile[] tile 
-    - Piece[] pieces
-    - int size
-    - bool player1Turn
-    + HexGrid(int size)
-    + SetUpGridTerrain()
-    + AddPiece()
-    + ExecuteCommand()
-    + DestroyPiecesAndCountVPs()
-    + GetGridAsString()
-    + GetPieceTypeInTile
+    # tile : Tile[]  
+    # pieces : Piece[] 
+    ~ size : int
+    ~ player1Turn : bool
+    + HexGrid()
+    + SetUpGridTerrain() void
+    + AddPiece() void
+    + ExecuteCommand() string
+    + DestroyPiecesAndCountVPs() bool
+    + GetGridAsString() string
+    + GetPieceTypeInTile string
+    - CheckTileIndexIsValid() bool
+    - CheckPieceAndTileAreValid() bool
+    - ExecuteCommandInTile() bool
+    - ExecuteMoveCommand() int
+    - ExecuteSpawnCommand() int
+    - ExecuteUpgradeCommand() int
+    - SetUpTiles() void
+    - SetUpNeighbours() void
+    - MovePiece() void
+    - GetPieceTypeInTile() string
+    - CreateBottomLine() string
+    - CreateTopLine() string
+    - CreateOddLine() string
+    - CreateEvenLine() string
+
+
 }
 
 class Tile {
-    - string terrian
-    - int x,y,z 
-    - Piece pieceInTile
-    - Tile[] neighbours
-    + Tile 
-    + Piece GetPieceInTile()
-    + string GetTerrain()
-    + int Getx()
-    + int Gety()
-    + int Getz()
-    + SetTerrain()
-    + SetPiece()
-    + AddToNeighbours()
-    + Tile[] GetNeighbours()
-    + int GetDistanceToTileT()
+    # terrain : string
+    # x,y,z : int  
+    # pieceInTile : Piece 
+    # neighbours : Tile[] 
+    + Tile() 
+    + GetPieceInTile() Piece 
+    + GetTerrain() string
+    + Getx() int
+    + Gety() int
+    + Getz() int
+    + SetTerrain() void
+    + SetPiece() void
+    + AddToNeighbours() void
+    + GetNeighbours() Tile[]
+    + GetDistanceToTileT() int
 }
 
 class Piece {
-    - bool destroyed
-    - bool belongsToPlayer1
-    - int fuelCostOfMove 
-    - int VPValue
-    - int connectionsToDestroy
-    - string pieceType
+    # destroyed : bool 
+    # belongsToPlayer1 : bool
+    # fuelCostOfMove  : int
+    # VPValue : int
+    # connectionsToDestroy : int
+    # pieceType : string
     + Piece()
-    + int GetVPs()
-    + bool GetBelongsToPlayer1()
-    + int CheckMoveIsValid()
-    + DestroyPiece()
-    + string GetPieceType()
-    + int GetConnectionsNeededToDestroy()
-    + bool HasMethod()
+    + GetVPs() int
+    + GetBelongsToPlayer1() bool
+    + CheckMoveIsValid() int
+    + DestroyPiece() void
+    + GetPieceType() string
+    + GetConnectionsNeededToDestroy() int
+    + HasMethod() bool
 }
 
 class BaronPiece {
     + BaronPiece()
-    + int CheckMoveIsValid()
+    + CheckMoveIsValid() int
 }
 
 class LESSPiece {
     + LESSPiece()
-    + int CheckMoveIsValid()
-    + int Saw()
+    + CheckMoveIsValid() int
+    + Saw() int
 }
 
 class PBDSPiece {
     + PBDSPiece()
-    + int CheckMoveIsValid()
-    + int Dig()
+    + CheckMoveIsValid() int
+    + Dig() int
 }
 
 class Player {
-    - int piecesInSupply
-    - int fuel
-    - int VPs 
-    - int lumber
-    - string name
+    # piecesInSupply : int
+    # fuel : int
+    # VPs : int
+    # lumber : int
+    # name : string
     + Player()
-    + string GetStateString()
-    + int GetVPs()
-    + int GetFuel()
-    + int GetLumber()
-    + string GetName()
-    + AddToVPs()
-    + UpdateFuel()
-    + UpdateLumber()
-    + int GetPiecesInSupply()
-    + RemoveTileFromSupply()
+    + GetStateString() string
+    + GetVPs() int
+    + GetFuel() int
+    + GetLumber() int
+    + GetName() string
+    + AddToVPs() void
+    + UpdateFuel() void
+    + UpdateLumber() void
+    + GetPiecesInSupply() int
+    + RemoveTileFromSupply() void
 }
 
-Piece <|-- BaronPiece
-Piece <|-- LESSPiece
-Piece <|-- PBDSPiece
-HexGrid o-- Tile
-HexGrid o-- Piece
-Tile --> Piece
+Piece <|-- BaronPiece : Inheritance
+Piece <|-- LESSPiece : Inheritance
+Piece <|-- PBDSPiece : Inheritance
+HexGrid *-- Tile : Composition
+HexGrid *-- Piece : Composition
+Tile --> Piece : Association
 ```
 
 # Notes

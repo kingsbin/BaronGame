@@ -1,6 +1,52 @@
 # <a id="top">Documentation of Classes used for playing pieces </a>
 Piece is a base class which has child classes associated with it.  Each different piece type has its own class.
 
+```mermaid
+
+---
+title: Baron Game
+---
+classDiagram
+direction RL
+
+class Piece {
+    # destroyed : bool 
+    # belongsToPlayer1 : bool
+    # fuelCostOfMove  : int
+    # VPValue : int
+    # connectionsToDestroy : int
+    # pieceType : string
+    + Piece()
+    + GetVPs() int
+    + GetBelongsToPlayer1() bool
+    + CheckMoveIsValid() int
+    + DestroyPiece() void
+    + GetPieceType() string
+    + GetConnectionsNeededToDestroy() int
+    + HasMethod() bool
+}
+
+class BaronPiece {
+    + BaronPiece()
+    + CheckMoveIsValid() int
+}
+
+class LESSPiece {
+    + LESSPiece()
+    + CheckMoveIsValid() int
+    + Saw() int
+}
+
+class PBDSPiece {
+    + PBDSPiece()
+    + CheckMoveIsValid() int
+    + Dig() int
+}
+Piece <|-- BaronPiece : Inheritance
+Piece <|-- LESSPiece : Inheritance
+Piece <|-- PBDSPiece : Inheritance
+```
+
 - Serf : [Piece](#piece)
 - Baron: [BaronPiece](#baronpiece)
 - LESS: [LESSPiece](#lesspiece)
