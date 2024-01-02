@@ -235,12 +235,14 @@ Method will create a new **Piece** object and add it to the **tiles[]** list (se
 
 Method processes a single command.  The command is passed in as a list with each element of the list having one word from the command e.g.
 Move 2 4
-would come in as a list
-|index|Value|
-|----|-----|
-|0|"Move"|
-|1|"2"|
-|2|"4"| 
+would come in as a list  
+
+|Index|Value
+|-----|-----
+| 0 |Move
+| 1 |2
+| 2 |4  
+
 The supplies of fuel, lumber and piece available are passed in as one set of parameters and then any change to this resulting from the command passed back to the called routine using **ref** parameters.  
 
 **Pseudo code**
