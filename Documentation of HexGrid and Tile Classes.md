@@ -196,6 +196,91 @@ The terrain types are represented by a char
 |#|Forest|Lumber|
 |~|Peat bog | Fuel|
 
+**AddPiece**
+|Parameters|||
+|----|----|-----|   
+|belongsToPlayer1 |bool|indicate if piece belongs to Player 1 (True) or Player 2 (False)  |
+|typeOfPiece |string|Type of Piece|
+|location |int|ID of **Tile** piece is in|
+
+
+|Returns||
+|----|-----|   
+|void||  
+
+Method will create a new **Piece** object and add it to the **tiles[]** list (see object properties).  
+
+|Values for typeOfPiece|Class to create|
+|----|----|
+|Baron|BaronPiece|
+|LESS|LESSPiece|
+|PBDS|PBDSPiece|
+|*any other value*|Piece (Serf)|
+
+**ExecuteCommand**
+|Parameters|||
+|----|----|-----|   
+|items|string[]|List with ONE commands to be processed.  Each element has 1 "word" from command|
+|fuelChange|int|**By Ref** used to **return** any new change to players fuel|
+|lumberChange|int|**By Ref** used to **return** any new change to players lumber|
+|supplyChange|int|**By Ref** used to **return** any new change to players supply of pieces|
+|fuelAvailable|int|How much fuel player has available BEFORE command executed|
+|lumberAvailable|int|How much lumber player has available BEFORE command executed|
+|piecesInSupply|int|How much supply pieces player has available BEFORE command executed|
+
+
+|Returns||
+|----|-----|   
+|string|Text description describing outcome of Command being processed  |  
+
+Method processes a single command.  The command is passed in as a list with each element of the list having one word from the command e.g.
+Move 2 4
+would come in as a list
+|index|Value|
+|----|-----|
+|0|"Move"|
+|1|"2"|
+|2|"4"| 
+The supplies of fuel, lumber and piece available are passed in as one set of parameters and then any change to this resulting from the command passed back to the called routine using **ref** parameters.  
+
+**Pseudo code**
+```
+SWITCH items[0]     //command word 
+    CASE "move"
+        fuelCost = ExecuteMoveCommand(items, fuelAvailable)
+        IF fuelCost < 0 THEN        //move command failed
+            RETURN "That move can't be done"
+        ENDIF
+        //if you get here move succeeded
+        fuelChange = fuelCost * -1
+    CASE "saw" OR "dig"
+        IF NOT ExecuteCommandInTile(items, REF fuelChange, REF lumberChange) THEN
+            //command failed
+            RETURN "Couldn't do that"
+        ENDIF
+        //if you get to here command must have succeeded
+    CASE "spawn"            // add new piece
+        lumberCost= ExecuteSpawnCommand(items, lumberAvailable, piecesInSupply)
+        IF lumberCost < 0 THEN          //spawn failed
+            RETURN "Spawning did not occur"
+        ENDIF
+        //if you get here the spawn succeeded
+        lumberChange = lumberCost * -1
+        supplyChange = 1
+    CASE "upgrade"          //upgrade serf to LESS or PBDS
+        lumberCost = ExecuteUpgradeCommand(items, lumberAvailable)
+        IF lumberCost < 0 THEN          //upgrade failed
+            RETURN "Upgrade not possible"
+        ENDIF
+        //if you get here the upgrade succeeded
+        lumberChange = lumberCost * -1
+END CASE
+
+//To get here the command succeeded as it did not hiy an explicit RETURN inside the switch
+RETURN "Command executed"
+```
+
+
 ### Private Methods
 **CheckTileIndexIsValid**
 |Parameters|||
