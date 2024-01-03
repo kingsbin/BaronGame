@@ -179,8 +179,11 @@ It then uses 2 other private methods
 - SetUpNeighbours()
 to initialise the other object properties correctly.
 
-### Public Methods
+### Methods
 **SetUpGridTerrain**
+
+Scope: Public
+
 |Parameters|||
 |----|----|-----|   
 |listOfTerrain |string[]|list with terrain for each **Tile** represented by a string  |
@@ -217,6 +220,7 @@ Method will create a new **Piece** object and add it to the **tiles[]** list (se
 |PBDS|PBDSPiece|
 |*any other value*|Piece (Serf)|
 
+#### Methods for executing player commands
 **ExecuteCommand**
 |Parameters|||
 |----|----|-----|   
@@ -281,7 +285,61 @@ END CASE
 //To get here the command succeeded as it did not hiy an explicit RETURN inside the switch
 RETURN "Command executed"
 ```
+**ExecuteMoveCommand**  
+  
+Scope: Private
+  
+|Parameters|||
+|----|----|-----|  
+|items|string[]|details of move command to execute|
 
+|Returns||
+|----|-----|
+|int|Cost of move in fuel|  
+
+**Pseudo code**  
+SR works by check all possible reasons why move is NOT possible and returns early with fail code if they are.  If no issues then move carried out and cost returned to calling SR
+
+```
+//check if start and end locations are valid
+IF NOT CheckPieceAndTileAreValid(startID) OR NOT CheckTileIndexIsValid(endID) THEN
+    RETURN -1       //failed move
+ENDIF
+thePiece = tiles[startID]           //get piece object to be moved
+
+//check the tile being moved to is empty
+IF tiles[endID].GetPieceInTile() != null THEN
+    RETURN -1       //failed move
+ENDIF
+
+//calculate the cost of the move in fuel and
+//check it is a valid move (distance/terrain for that piece)
+distance = tiles[startID].GetDistanceToTileT(tiles[endID])
+fuelCost = thePiece.CheckMoveIsValid(distance, tiles[startID].GetTerrain(), tiles[endID].GetTerrain())
+
+//if move impossible fuelCost will be -1
+//check that player has enough fuel for move
+IF fuelCost = -1 OR fuelAvailable < fuelCost THEN
+    RETURN -1       //failed move
+ENDIF
+
+//If all checks are passed then move is valid so carry it out
+//and pass back to calling SR cost of move in fuel
+MovePiece(endID, startID)
+RETURN fuelCost
+```
+
+### Methods for outputing the board display  
+In order to output the board display to the console a **HexGrid** object can return the board as a single (fairly complex) string variable.  This variable will include all the CR/LF neccesary so can just be output with a single simple *Console.WriteLine* command
+
+The methods are
+- GetGridAsString() - Public
+- CreateBottomLine()
+- CreateTopLine()
+- CreateOddLine()
+- CreateEvenLine() 
+
+**GetGridAsString** is called and in turns calls the other (private) methods as needed to build a single string variable called *gridAsString* which is then returned to the called SR.  
 
 ### Private Methods
 **CheckTileIndexIsValid**
@@ -292,5 +350,64 @@ RETURN "Command executed"
 |Returns||
 |----|-----|   
 |bool |indicate if index passed is valid for this **HexGrid** |
+
+**MovePiece**
+|Parameters|||
+|----|----|-----|   
+|newIndex|int|Grid ID to move piece to|
+|oldIndex|int|Grid ID the piece is currently in|  
+
+|Returns||
+|----|-----|   
+|void| |  
+
+This method does no validation of the move as this is all carried out in the calling SR **ExecuteMoveCommand**. It
+- Set **piece** property in newIndex **Tile** to the  **piece** currently in oldIndex **Tile**
+- Set **piece** property in oldIndex **Tile** to null
+  
+**CheckTileIndexIsValid**
+|Parameters|||
+|----|----|-----|    
+|tileToCheck|int|Index to **tile[]** of tile being checked|
+
+|Returns||
+|----|-----|   
+|bool|Is tile Index valid for this **HexGrid** object|   
+
+Checks if index > 0 and < size of HexGrid
+
+
+**CheckPieceAndTileAreValid**
+|Parameters|||
+|----|----|-----|    
+|tileToUse|int|Index to **tile[]** of tile being checked|
+
+|Returns||
+|----|-----|   
+|bool|Is tile Index valid for this **HexGrid** object|  
+
+**Pseudo Code**  
+```
+IF CheckTileIndexIsValid(tileToUse) THEN
+
+    thePiece = tiles[tileToUse].GetPieceInTile()
+    //check there is actually a piece on this tile
+    IF thePiece != null THEN 
+
+        //check the piece belongs to current player
+        IF thePiece.GetBelongsToPlayer1() == player1Turn THEN
+            //move is Valid
+            RETURN True
+        ENDIF
+
+    ENDIF
+
+ENDIF
+
+//Move is NOT valid
+RETURN False
+```
+
+
 
 *[Return to top](#top)* 
