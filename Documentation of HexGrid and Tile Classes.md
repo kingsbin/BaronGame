@@ -1,6 +1,7 @@
 # <a id="top">Documentation of HexGrid and Tile Classes</a>  
 
-The **[Tile](#tile)** class stores the details of one individual board tile.  The **[HexGrid](#hexgrid)** represents the entire playing board.    
+The **[Tile](#tile)** class stores the details of one individual board tile.  
+The **[HexGrid](#hexgrid)** represents the entire playing board.    
 
 ```mermaid
 
@@ -75,8 +76,15 @@ If there is a playing piece in the tile this can be referenced through the piece
 
 The *id* of the tile is not held as a property but instead is the list index in the **HexGrid** object that the tile is in. 
 
-
-
+**Methods**  
+- [Get and Set Methods](#getset-methods)  
+- [Constructor](#constructor-method)
+- [GetDistanceToTileT](#getdistancetotilet)
+- [AddToNeighbours](#addtoneighbours)
+  
+    
+*[Return to top](#top)*  
+  
 
 ### Properties
 |Name|Type|Scope|Description|Initial Value|
@@ -102,6 +110,9 @@ The following *get* methods are available to access the private/protected proper
 The following *set* methods are available to update the private/protected properties.  
 - SetPiece (piece : Piece)
 - SetTerrain (terrain : string)
+  
+*[Return to Tile Methods](#tile)*
+  
 
 ### Constructor Method
 **Tile**
@@ -115,9 +126,11 @@ This method is the **constructor** method for the class
 |Returns|
 |----|   
 |null |
+  
+*[Return to Tile Methods](#tile)*
 
 ### Methods
-**GetDistanceToTileT**
+#### **GetDistanceToTileT**
 |Parameters|||
 |----|----|-----|   
 |t |Tile| Tile to calculate distance to from this tile|
@@ -126,7 +139,14 @@ This method is the **constructor** method for the class
 |----|-----|   
 |int |Distance to tile|
 
-**AddToNeighbours**
+
+Calculates the distance between this **Tile** and the one passed as a parameter 
+
+If tiles are t1 and t2 then calculation is   
+*&emsp;max ( |t1.x - t2.x|  , |t1.y - t2.y|, |t1.z - t2.z|   )*
+
+
+#### **AddToNeighbours**
 |Parameters|||
 |----|----|-----|   
 |n |Tile|Reference to Tile object to add to list of neighbours|
@@ -134,6 +154,10 @@ This method is the **constructor** method for the class
 |Returns|
 |----|   
 |null |  
+
+Add reference to **Tile** passed as parameter into property **neighbours** 
+  
+*[Return to Tile Methods](#tile)*
 
 *[Return to top](#top)*  
 
@@ -144,6 +168,18 @@ The HexGrid is the object that represents the playing board.  The key data held 
 - List of the **Piece** objects representing the playing pieces
 
 The index of a **Tile** in the tiles list is also that **Tile** ID "property" which is heavily utilised
+  
+  *[Return to Tile Methods](#tile)*
+  
+  *[Return to top](#top)*  
+
+**Methods**  
+- [Get/Set Method](#getset-methods-1)
+- [Constructor](#constructor-method-1)
+- [Methods to set up board](#methods-to-setup-the-board)
+- [Methods to Execute player command](#methods-for-executing-player-commands)
+- [Method for End of turn processing](#methods-to-process-end-of-turn)
+- [Methods to Output screen for Console](#methods-for-outputing-the-board-display)
 
 ### Properties
 |Name|Type|Scope|Description|Initial Value|
@@ -161,6 +197,8 @@ The following *get* methods are available to access the private/protected proper
 
 The following *set* methods are available to update the private/protected properties.  
 
+*[Return to HexGrid Methods](#hexgrid)*
+
 ### Constructor Method
 **HexGrid**
 This method is the **constructor** method for the class  
@@ -177,9 +215,11 @@ The constructor will always set the **player1Turn** property to *true* to indica
 It then uses 2 other private methods
 - SetUpTiles
 - SetUpNeighbours()
-to initialise the other object properties correctly.
+to initialise the other object properties correctly.  
+       
+*[Return toHexGrid Methods](#hexgrid)*
 
-### Methods
+### Methods to Setup the Board
 **SetUpGridTerrain**
 
 Scope: Public
@@ -200,6 +240,9 @@ The terrain types are represented by a char
 |~|Peat bog | Fuel|
 
 **AddPiece**
+
+Scope: Public
+
 |Parameters|||
 |----|----|-----|   
 |belongsToPlayer1 |bool|indicate if piece belongs to Player 1 (True) or Player 2 (False)  |
@@ -219,8 +262,105 @@ Method will create a new **Piece** object and add it to the **tiles[]** list (se
 |LESS|LESSPiece|
 |PBDS|PBDSPiece|
 |*any other value*|Piece (Serf)|
+  
+**SetUpTiles**
+ 
+Scope: Private  
+|Parameters|||
+|----|----|-----|   
+|void |||
 
-#### Methods for executing player commands
+
+|Returns||
+|----|-----|   
+|void||  
+
+Sets up the playing board by creating all the **Tile** objects required and adding them into the list **tiles** which is an object property.  As **Tile** are created their x,y,z coordinates are calculated.  
+
+As it is a hex board it uses 3 coordinates (x,y,z).  If you consider the board as rows and columns then you can think of the *columns* as being vertical and the *rows* as staggered with the next hex along alternating between slightly below and slightly above its predecessor.   
+
+Each row is then split into *odd* and *even* x coordinates with the even part of the row slightly above the odd part.  
+
+The *height* of the board is half the width so if size is 8 the board consists of a 8 x 4 hex.
+
+```
+evenStartZ = 0
+oddStartZ = 0
+evenStartY = 0
+oddStartY = -1
+
+//Main loop down the Grid
+FOR count = 1 to self.size / 2
+    //create 2 rows at a time
+    //create the even row
+    y=evenStartY
+    z=evenStartZ
+    FOR x = 0 TO self.size STEP 2       //x will increment 2 per iteration
+        
+        //create new Tile and append to tiles list
+        tempTile = new Tile(x,y,z)
+        tiles.Add(tempTile)
+        y = y -1
+        z = z - 1
+
+    END FOR
+    //change starting values for Z and X for next iteration
+    evenStartZ = evenStartZ + 1
+    evenStartY = evenStartY - 1
+
+    //create the odd row
+    y=oddStartY
+    z=oddStartZ
+    FOR x = 1 TO self.size-1 STEP 2       //x will increment 2 per iteration
+        
+        //create new Tile and append to tiles list
+        tempTile = new Tile(x,y,z)
+        tiles.Add(tempTile)
+        y = y -1
+        z = z - 1
+
+
+    END FOR
+    //change starting values for Z and X for next iteration
+    evenStartZ = evenStartZ + 1
+    evenStartY = evenStartY - 1
+
+ENDFOR
+```
+
+**SetUpNeighbours**  
+
+Scope: Private
+|Parameters|||
+|----|----|-----|   
+|void |||
+
+
+|Returns||
+|----|-----|   
+|void||  
+
+The process exhaustively checks each **Tile** against every other **Tile** and finds the *distance* between them,  if it is 1 (eg they are touching) then it adds it to the list property **neighbours** on that **Tile** . 
+
+```
+//Iterate through all tiles on the board
+FOR EACH fromTile in self.tiles
+
+    //Iterate through all tiles on the board
+    FOR EACH toTile in self.tiles
+        //If fromTile and toTile are touching
+        IF fromTile.GetDistanceToTileT(toTile)= 1 THEN
+            fromTile.AddToNeighbours(toTile)
+        ENDIF
+
+    ENDFOR
+    
+ENDFOR
+```
+
+*[Return toHex Grid Methods](#hexgrid)*
+  
+#### **Methods for executing player commands**
 **ExecuteCommand**
 |Parameters|||
 |----|----|-----|   
@@ -327,31 +467,12 @@ ENDIF
 //and pass back to calling SR cost of move in fuel
 MovePiece(endID, startID)
 RETURN fuelCost
-```
+```  
 
-### Methods for outputing the board display  
-In order to output the board display to the console a **HexGrid** object can return the board as a single (fairly complex) string variable.  This variable will include all the CR/LF neccesary so can just be output with a single simple *Console.WriteLine* command
+**MovePiece**  
+  
+Scope: Private
 
-The methods are
-- GetGridAsString() - Public
-- CreateBottomLine()
-- CreateTopLine()
-- CreateOddLine()
-- CreateEvenLine() 
-
-**GetGridAsString** is called and in turns calls the other (private) methods as needed to build a single string variable called *gridAsString* which is then returned to the called SR.  
-
-### Private Methods
-**CheckTileIndexIsValid**
-|Parameters|||
-|----|----|-----|   
-|TileToCheck |int|index value to **tiles** List|
-
-|Returns||
-|----|-----|   
-|bool |indicate if index passed is valid for this **HexGrid** |
-
-**MovePiece**
 |Parameters|||
 |----|----|-----|   
 |newIndex|int|Grid ID to move piece to|
@@ -364,8 +485,24 @@ The methods are
 This method does no validation of the move as this is all carried out in the calling SR **ExecuteMoveCommand**. It
 - Set **piece** property in newIndex **Tile** to the  **piece** currently in oldIndex **Tile**
 - Set **piece** property in oldIndex **Tile** to null
-  
+
 **CheckTileIndexIsValid**
+  
+Scope: Private
+
+|Parameters|||
+|----|----|-----|   
+|TileToCheck |int|index value to **tiles** List|
+
+|Returns||
+|----|-----|   
+|bool |indicate if index passed is valid for this **HexGrid** |
+
+ 
+**CheckTileIndexIsValid**
+  
+Scope: Private  
+
 |Parameters|||
 |----|----|-----|    
 |tileToCheck|int|Index to **tile[]** of tile being checked|
@@ -374,10 +511,12 @@ This method does no validation of the move as this is all carried out in the cal
 |----|-----|   
 |bool|Is tile Index valid for this **HexGrid** object|   
 
-Checks if index > 0 and < size of HexGrid
+Checks if index > 0 and < size of HexGrid  
+  
+  **CheckPieceAndTileAreValid**  
+  
+Scope: Private
 
-
-**CheckPieceAndTileAreValid**
 |Parameters|||
 |----|----|-----|    
 |tileToUse|int|Index to **tile[]** of tile being checked|
@@ -407,7 +546,88 @@ ENDIF
 //Move is NOT valid
 RETURN False
 ```
+       
+*[Return to HexGrid Methods](#hexgrid)*
 
+### Methods to Process end of turn
 
+**DestroyPiecesAndCountVPs**  
+|Parameters|||
+|----|----|-----|    
+|player1VPs|int|Number of victory points for Player 1.  Passed by **ref** so it can be updated within method|
+|player2VPs|int|Number of victory points for Player 2.  Passed by **ref** so it can be updated within method|
+
+|Returns||
+|----|-----|   
+|bool|Has one (or both) baron pieces been destroyed and therefore the game will end|   
+
+End of player turn processing.  Loops through each **Tile** which as a piece on it and checks to see if it needs to be *destroyed* 
+
+**Pseudo code**
+```
+baronDestroyed = False                      //this is also the RETURN variable
+listOfTilesContainingDestroyedPieces = []   //List that will hold references to any piece destroyed  
+
+//Loop through all the tiles on the HexGrid 
+FOR EACH t IN tiles  
+    
+    //check to see if piece in tile,
+    IF t.GetPieceInTile != null THEN                //piece in that Tile
+
+        //Check through all the neighbours of the Tile to and count how many a piece in them 
+        listOfNeighbours = t.GetNeighbours
+        noOfConnections = 0
+        FOR EACH n IN listOfNeighbours
+            IF n.GetPieceInTile != null THEN        //piece in that Tile
+                noOfConnections ++
+            ENDIF
+        END FOR
+
+        //Check to see if piece show be marked to be destroyed
+        thePiece = t.GetPieceInTile()
+        IF noOFConnections >= thePiece.GetConnectionsneededToDestroy() THEN
+            //mark piece as destroyed
+            thePiece.DestroyPiece()
+
+            //check if piece is one of the Barons
+            IF thePiece.GetPieceType() = "B" THEN
+                baronDestroyed = True           //This will be the RETURN value
+            ENDIF
+
+            //Update the Victory points
+            IF thePiece.GetBelongsToPlayer1()=True THEN
+                player2VPs = player2VPs + thePiece.GetVPs()
+            ELSE
+                player1VPs = player1VPs + thePiece.GetVPs()
+            ENDIF
+        ENDIF
+
+    ENDIF
+END FOR
+
+//Now remove any destroyed pieces from board using list listOfTilesContainingDestroyedPieces  
+FOR EACH t IN listOfTilesContainingDestroyedPieces
+    t.SetPiece(null)            //Remove the piece from "board" so tile will now be empty
+ENDFOR
+
+RETURN baronDestroyed
+```
+       
+*[Return to HexGrid Methods](#hexgrid)*
+
+### Methods for outputing the board display  
+In order to output the board display to the console a **HexGrid** object can return the board as a single (fairly complex) string variable.  This variable will include all the CR/LF neccesary so can just be output with a single simple *Console.WriteLine* command
+
+The methods are
+- GetGridAsString() - Public
+- CreateBottomLine()
+- CreateTopLine()
+- CreateOddLine()
+- CreateEvenLine() 
+
+**GetGridAsString** is called and in turns calls the other (private) methods as needed to build a single string variable called *gridAsString* which is then returned to the called SR.  
+
+       
+*[Return to HexGrid Methods](#hexgrid)*
 
 *[Return to top](#top)* 
