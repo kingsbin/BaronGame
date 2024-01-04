@@ -485,6 +485,7 @@ Scope: Private
 |----|-----|
 |int|Cost of move in fuel (3), -1 if spawn fails|  
 
+**Pseudo code** 
 ```
 tbc
 ```  
@@ -502,6 +503,7 @@ Scope: Private
 |----|-----|
 |int|Cost of move in lumber (5), -1 if spawn fails|  
 
+**Pseudo code** 
 ```
 tbc
 ```
