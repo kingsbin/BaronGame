@@ -132,7 +132,7 @@ This method is the **constructor** method for the class
 *[Return to Tile Methods](#tile)*
 
 ### Methods
-#### **GetDistanceToTileT**
+#### <u>**GetDistanceToTileT**</u>
 |Parameters|||
 |----|----|-----|   
 |t |Tile| Tile to calculate distance to from this tile|
@@ -148,7 +148,7 @@ If tiles are t1 and t2 then calculation is
 *&emsp;max ( |t1.x - t2.x|  , |t1.y - t2.y|, |t1.z - t2.z|   )*
 
 
-#### **AddToNeighbours**
+#### <u>**AddToNeighbours**</u>
 |Parameters|||
 |----|----|-----|   
 |n |Tile|Reference to Tile object to add to list of neighbours|
@@ -222,7 +222,7 @@ to initialise the other object properties correctly.
 *[Return toHexGrid Methods](#hexgrid)*
 
 ### Methods to Setup the Board
-**SetUpGridTerrain**
+<u>**SetUpGridTerrain**</u>
 
 Scope: Public
 
@@ -241,7 +241,7 @@ The terrain types are represented by a char
 |#|Forest|Lumber|
 |~|Peat bog | Fuel|
 
-**AddPiece**
+<u>**AddPiece**</u>
 
 Scope: Public
 
@@ -265,7 +265,7 @@ Method will create a new **Piece** object and add it to the **tiles[]** list (se
 |PBDS|PBDSPiece|
 |*any other value*|Piece (Serf)|
   
-**SetUpTiles**
+**<u>SetUpTiles</u>**
  
 Scope: Private  
 |Parameters|||
@@ -330,7 +330,7 @@ FOR count = 1 to self.size / 2
 ENDFOR
 ```
 
-**SetUpNeighbours**  
+**<u>SetUpNeighbours</u>**  
 
 Scope: Private
 |Parameters|||
@@ -363,7 +363,7 @@ ENDFOR
 *[Return toHex Grid Methods](#hexgrid)*
   
 #### **Methods for executing player commands**
-**ExecuteCommand**
+**<u>ExecuteCommand</u>**
 |Parameters|||
 |----|----|-----|   
 |items|string[]|List with ONE commands to be processed.  Each element has 1 "word" from command|
@@ -427,13 +427,14 @@ END CASE
 //To get here the command succeeded as it did not hiy an explicit RETURN inside the switch
 RETURN "Command executed"
 ```
-**ExecuteMoveCommand**  
+**<u>ExecuteMoveCommand</u>**  
   
 Scope: Private
   
 |Parameters|||
 |----|----|-----|  
 |items|string[]|details of move command to execute|
+|fuelAvailable|int|Quantity of fuel available to player|
 
 |Returns||
 |----|-----|
@@ -470,8 +471,42 @@ ENDIF
 MovePiece(endID, startID)
 RETURN fuelCost
 ```  
+**<u>ExecuteSpawnCommand</u>**  
+  
+Scope: Private
+  
+|Parameters|||
+|----|----|-----|  
+|items|string[]|details of move command to execute|
+|fuelAvailable|int|Quantity of fuel available to player|
+|piecesInSupply|int|Quantity of pieces in player supply|
 
-**MovePiece**  
+|Returns||
+|----|-----|
+|int|Cost of move in fuel (3), -1 if spawn fails|  
+
+```
+tbc
+```  
+
+**<u>ExecuteUpgradeCommand</u>**  
+  
+Scope: Private
+  
+|Parameters|||
+|----|----|-----|  
+|items|string[]|details of move command to execute|
+|lumberAvailable|int|Quantity of lumber available to player|
+
+|Returns||
+|----|-----|
+|int|Cost of move in lumber (5), -1 if spawn fails|  
+
+```
+tbc
+```
+
+**<u>MovePiece</u>**  
   
 Scope: Private
 
@@ -488,7 +523,7 @@ This method does no validation of the move as this is all carried out in the cal
 - Set **piece** property in newIndex **Tile** to the  **piece** currently in oldIndex **Tile**
 - Set **piece** property in oldIndex **Tile** to null
 
-**CheckTileIndexIsValid**
+**<u>CheckTileIndexIsValid</u>**
   
 Scope: Private
 
@@ -501,7 +536,7 @@ Scope: Private
 |bool |indicate if index passed is valid for this **HexGrid** |
 
  
-**CheckTileIndexIsValid**
+**<u>CheckTileIndexIsValid</u>**
   
 Scope: Private  
 
@@ -515,7 +550,7 @@ Scope: Private
 
 Checks if index > 0 and < size of HexGrid  
   
-  **CheckPieceAndTileAreValid**  
+  **<u>CheckPieceAndTileAreValid</u>**  
   
 Scope: Private
 
@@ -553,7 +588,7 @@ RETURN False
 
 ### Methods to Process end of turn
 
-**DestroyPiecesAndCountVPs**  
+**<u>DestroyPiecesAndCountVPs</u>**  
 |Parameters|||
 |----|----|-----|    
 |player1VPs|int|Number of victory points for Player 1.  Passed by **ref** so it can be updated within method|
